@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Leadzee - Connexion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center h-screen">
+    
+    <div class="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md">
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">Bon retour !</h1>
+            <p class="text-gray-500 text-sm mt-1">Connectez-vous à votre espace Leadzee</p>
+        </div>
+
+        <form id="loginForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700">Adresse email</label>
+                <input type="email" id="email" required class="w-full mt-1 p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none transition">
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700">Mot de passe</label>
+                <input type="password" id="password" required class="w-full mt-1 p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none transition">
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-lg hover:bg-blue-700 shadow-lg shadow-blue-200 transition transform active:scale-95">
+                Se connecter
+            </button>
+        </form>
+
+        <p class="mt-6 text-center text-sm text-gray-500">
+            Pas encore de compte ? <a href="inscription.html" class="text-blue-600 font-bold hover:underline">Inscrivez-vous</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const loginData = {
+                emailUtilisateur: document.getElementById('email').value,
+                passwordHash: document.getElementById('password').value
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(loginData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    alert("Connexion réussie !");
+                    // On stocke l'ID utilisateur pour savoir qui est connecté
+                    localStorage.setItem('userId', result.user.id);
+                    window.location.href = 'index.html'; // Redirection dashboard
+                } else {
+                    alert("Erreur : " + result.message);
+                }
+            } catch (error) {
+                alert("Serveur injoignable.");
+            }
+        });
+    </script>
+</body>
+</html>

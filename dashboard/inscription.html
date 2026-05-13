@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Leadzee - Inscription</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center h-screen">
+    
+    <div class="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md">
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">Rejoignez Leadzee</h1>
+            <p class="text-gray-500 text-sm mt-1">Lancez votre prospection automatisée</p>
+        </div>
+
+        <form id="registerForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700">Votre nom</label>
+                <input type="text" id="nom" required class="w-full mt-1 p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none transition">
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700">Adresse email</label>
+                <input type="email" id="email" required class="w-full mt-1 p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none transition">
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700">Mot de passe</label>
+                <input type="password" id="password" required class="w-full mt-1 p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none transition">
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-lg hover:bg-blue-700 shadow-lg shadow-blue-200 transition transform active:scale-95">
+                Démarrer maintenant
+            </button>
+        </form>
+
+        <p class="mt-6 text-center text-sm text-gray-500">
+            Déjà membre ? <a href="login.html" class="text-blue-600 font-bold hover:underline">Connectez-vous</a>
+        </p>
+    </div>
+
+    <script>
+        const registerForm = document.getElementById('registerForm');
+
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Empêche le rechargement de la page
+
+            // 1. Récupération des données depuis les inputs
+            const userData = {
+                nomUtilisateur: document.getElementById('nom').value,
+                emailUtilisateur: document.getElementById('email').value,
+                passwordHash: document.getElementById('password').value
+                
+            };
+
+            try {
+                // 2. Appel de l'api
+                const response = await fetch('http://localhost:3000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                const result = await response.json();
+
+                // 3. Gestion de la réponse
+                if (response.ok && result.success) {
+                    alert("Succès : " + result.message);
+                   
+                    window.location.href = 'onboarding.html'; 
+                } else {
+                    // Affiche l'erreur renvoyée par le contrôleur (ex: Email déjà pris)
+                    alert("Erreur : " + result.message);
+                }
+
+            } catch (error) {
+                console.error("Erreur réseau :", error);
+                alert("Impossible de contacter le serveur. As-tu bien lancé 'node src/app.js' ?");
+            }
+        });
+    </script>
+</body>
+</html>

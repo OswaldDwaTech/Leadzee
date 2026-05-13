@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        // On vérifie si l'utilisateur est déjà connecté (via le localStorage)
+        const userId = localStorage.getItem('userId');
+
+        if (!userId) {
+            // S'il n'est pas connecté, on l'envoie vers la connexion
+            window.location.href = 'connexion.html';
+        } else {
+            // S'il est connecté, on l'envoie vers le dashboard
+            // (Ici, crée une page dashboard.html si tu ne l'as pas encore)
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</head>
+<body>
+    <p>Redirection en cours...</p>
+</body>
+</html>
